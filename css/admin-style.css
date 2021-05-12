@@ -1,0 +1,176 @@
+<style>
+/* Admin */
+.php-error #adminmenuback, .php-error #adminmenuwrap {
+    margin-top: 0em;
+}
+
+#workout_plans_worksheet_links a {
+border: 1px solid #fe6419;
+padding: 2px 8px;
+}
+
+#worksheet_links a{border: 1px solid #fe6419; padding: 2px 8px;}
+.ab-block-accordion .ab-accordion-title{background: white !important;}
+.accordion input{padding: 3px 8px;}
+
+/* Responsive tables */
+.responsive_table_wrapper{
+    overflow-x: auto;
+}
+
+.responsive_table_wrapper table {
+    width: 1200px;
+}
+
+.inner {
+  padding-left: 1em;
+  overflow: hidden;
+  display: none;
+}
+
+ul.accordion{
+  margin-left: 0;
+}
+
+ul.accordion li{
+  list-style-type: none;
+}
+
+.inner table{
+  margin-bottom: 10px;
+}
+
+ul li {
+  margin: 0.5em 0;
+  list-style-type: none;
+}
+
+li a.toggle {
+  width: 100%;
+  display: block;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fefefe;
+  padding: 0.75em;
+  border-radius: 0.15em;
+  transition: background 0.3s ease;
+}
+
+ul li a.toggle:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.table-wrapper {
+    height: 1000px;
+    overflow-x: scroll;
+    width: max-content;
+}
+
+.table {
+  border-collapse: collapse;
+  background-color: #ffffff;
+  /*width: 100%;*/
+  font-size: 12px;
+}
+.table th {
+  padding: 10px;
+  font-weight: bold;
+  border-bottom: 2px solid #e6e7e8;
+  font-size: 14px;
+  text-align: left;
+}
+.table td {
+  padding: 10px;
+  border-bottom: 1px solid #e6e7e8;
+}
+.table td.even {
+  background-color: #e6e7e8;
+}
+.table.table-striped tr:nth-child(even) {
+  background: #f7f8fa;
+}
+
+/* ------------------------------- */
+
+a.button-link {
+	padding: 10px 16px;
+	border: 1px solid #333;
+	border-radius: 3px;
+	text-decoration: none;
+}
+
+.button {
+  padding: 4px 10px !important;
+  display: inline-block !important;
+  height: auto !important;
+  font-size: 12px;
+}
+.button.button-danger {
+  background-color: #e73c3c;
+  border-color: #cd1919;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.button.button-danger:hover {
+  background-color: #df1b1b;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.button.button-warning {
+  background-color: #f1c40f;
+  border-color: #b8960b;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.button.button-warning:hover {
+  background-color: #cba50c;
+}
+.button.button-success {
+  background-color: #85c744;
+  border-color: #669e2f;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.button.button-success:hover {
+  background-color: #71ae34;
+}
+.button.button-primary {
+  background-color: #4f8edc;
+  border-color: #4f8edc;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.button.button-primary:hover {
+  background-color: #2d78d5;
+}
+.button.button-default {
+  color: #000000 !important;
+}
+
+/* ------------------------------ */
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+.alert.alert-danger {
+  background-color: #fdf2f2;
+  border-color: #f29797;
+  color: #a81515;
+}
+.alert.alert-success {
+  background-color: #ebf6e1;
+  border-color: #b8df92;
+  color: #527f26;
+}
+</style>
