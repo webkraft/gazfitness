@@ -4,9 +4,18 @@
     margin-top: 0em;
 }
 
-#workout_plans_worksheet_links a {
+#workout_plans_worksheet_links a,
+#workout_plans_bodyareas_links a {
 border: 1px solid #fe6419;
 padding: 2px 8px;
+}
+
+#workout_plans_bodyareas_links {
+margin-top: 20px;
+}
+
+#workout_plans_bodyareas_links a {
+padding: 2px 16px;
 }
 
 #worksheet_links a{border: 1px solid #fe6419; padding: 2px 8px;}
@@ -155,6 +164,10 @@ a.button-link {
   color: #000000 !important;
 }
 
+.enter-weights-btn {
+	border: 1px solid #fe6419;
+}
+
 /* ------------------------------ */
 
 .alert {
@@ -173,4 +186,18 @@ a.button-link {
   border-color: #b8df92;
   color: #527f26;
 }
+
+/* --------------------------------- */
+
+#workout_plans_results input,
+#workout_plans_results select,
+#workout_plans_results textarea {
+    padding: 8px 12px;
+}
+
+.workout-set-form {
+	width: 300px;
+	float: right;
+}
+
 </style>

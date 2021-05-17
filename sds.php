@@ -56,8 +56,12 @@ if (!class_exists("sds_gazbfit")) {
 			* Set names for ajax action
 			*
 			*/
-        	add_action( 'wp_ajax_get_workout_sheet_names', array( $this, 'get_workout_sheet_names_callback') );
-        	add_action( 'wp_ajax_get_workout_sheets', array( $this, 'get_workout_sheets_callback') );
+        	add_action( 'wp_ajax_get_workout_sheet_names', array( $this, 'get_workout_sheet_names_callback') );        	
+        	add_action( 'wp_ajax_get_workout_bodyarea', array( $this, 'get_workout_bodyarea_callback') );        	
+        	add_action( 'wp_ajax_get_bodyarea_workouts', array( $this, 'get_bodyarea_workouts_callback') );        	
+        	add_action( 'wp_ajax_get_workout_set_form', array( $this, 'get_workout_set_form_callback') );
+        	
+        	//add_action( 'wp_ajax_get_workout_sheets', array( $this, 'get_workout_sheets_callback') );
         	//add_action( 'wp_ajax_nopriv_my_action', array( $this, 'get_workout_sheet_names_callback') );
 		}
     	
@@ -68,15 +72,38 @@ if (!class_exists("sds_gazbfit")) {
 		*/
 	    public function enqueue_ajax() {
 	        
+	        //Get workout sheets
 	        wp_enqueue_script('get_workout_sheet_names', plugins_url('js/subscriber/workout-plans.js', __FILE__), array('jquery'), '1.0', true);
 	        wp_localize_script( 'get_workout_sheet_names', 'get_workout_sheet_names_file', array(
 	            'ajaxurl' => admin_url('admin-ajax.php'),
 	            'nonce' => wp_create_nonce('_wpnonce')
 	        ));
 	        
-	        //Get workouts by workout sheet Id
-	        wp_enqueue_script('get_workout_sheets', plugins_url('js/subscriber/workout-sheets.js', __FILE__), array('jquery'), '1.0', true);
+	        //Get workouts for body area drop downs - depreciated
+	        /*wp_enqueue_script('get_workout_sheets', plugins_url('js/subscriber/workout-sheets.js', __FILE__), array('jquery'), '1.0', true);
 	        wp_localize_script( 'get_workout_sheets', 'get_workout_sheets_file', array(
+	            'ajaxurl' => admin_url('admin-ajax.php'),
+	            'nonce' => wp_create_nonce('_wpnonce')
+	        ));
+	        */
+	        
+	        // --- Get body areas and user weight entries from workouts
+	        wp_enqueue_script('get_workout_bodyarea', plugins_url('js/subscriber/workout-bodyareas.js', __FILE__), array('jquery'), '1.0', true);
+	        wp_localize_script( 'get_workout_bodyarea', 'get_workout_bodyarea_file', array(
+	            'ajaxurl' => admin_url('admin-ajax.php'),
+	            'nonce' => wp_create_nonce('_wpnonce')
+	        ));
+	        
+	        // --- Get workouts based on body area
+	        wp_enqueue_script('get_bodyarea_workouts', plugins_url('js/subscriber/bodyarea-workouts.js', __FILE__), array('jquery'), '1.0', true);
+	        wp_localize_script( 'get_bodyarea_workouts', 'get_bodyarea_workouts_file', array(
+	            'ajaxurl' => admin_url('admin-ajax.php'),
+	            'nonce' => wp_create_nonce('_wpnonce')
+	        ));
+	        
+	        // --- Get and set workout set form
+	        wp_enqueue_script('get_workout_set_form', plugins_url('js/subscriber/workout-set-form.js', __FILE__), array('jquery'), '1.0', true);
+	        wp_localize_script( 'get_workout_set_form', 'get_workout_set_form_file', array(
 	            'ajaxurl' => admin_url('admin-ajax.php'),
 	            'nonce' => wp_create_nonce('_wpnonce')
 	        ));
@@ -198,8 +225,8 @@ if (!class_exists("sds_gazbfit")) {
 				
 				//$this->register_js('workout_plans');
 				//$this->register_css('admin');
-				include_once dirname ( __FILE__ ).'/css/admin-style.css';
 				include_once dirname ( __FILE__ ).'/views/admin/dashboard-page.php';
+				include_once dirname ( __FILE__ ).'/css/admin-style.css';
 				
 			}else {
 				$subcribe_links = $this->get_subcribelink();
@@ -259,9 +286,8 @@ if (!class_exists("sds_gazbfit")) {
 				
 				//$this->register_js('workout_plans');
 				//$this->register_css('admin');
-				include_once dirname ( __FILE__ ).'/css/admin-style.css';
 				include_once dirname ( __FILE__ ).'/views/admin/edit-workouts.php';
-				
+				include_once dirname ( __FILE__ ).'/css/admin-style.css';				
 				
 			}else {
 				$subcribe_links = $this->get_subcribelink();
@@ -272,7 +298,9 @@ if (!class_exists("sds_gazbfit")) {
 		
 		
 		/*
+		*
 		* 	Purpose: Edit single workouts
+		*
 		*/
 		function edit_single_workout (){
 		
@@ -349,9 +377,8 @@ if (!class_exists("sds_gazbfit")) {
 				
 				//$this->register_js('workout_plans');
 				//$this->register_css('admin');
-				include_once dirname ( __FILE__ ).'/css/admin-style.css';
 				include_once dirname ( __FILE__ ).'/views/admin/form-edit.php';
-				
+				include_once dirname ( __FILE__ ).'/css/admin-style.css';				
 				
 			}else {
 				$subcribe_links = $this->get_subcribelink();
@@ -388,8 +415,10 @@ if (!class_exists("sds_gazbfit")) {
 		
 		
 		/*
-		 * 	Purpose: Initialises the plugin
-		 */
+		*
+		* 	Purpose: Diplay workout plans - video, table and form
+		*
+		*/
 		function workout_plans (){
 		
 			if($this->is_authorised() == true){
@@ -408,8 +437,8 @@ if (!class_exists("sds_gazbfit")) {
 				
 				//$this->register_js('workout_plans');
 				//$this->register_css('admin');
-				include_once dirname ( __FILE__ ).'/css/admin-style.css';
 				include_once dirname ( __FILE__ ).'/views/subscriber/workout-plans.php';
+				include_once dirname ( __FILE__ ).'/css/admin-style.css';
 				
 			}else {
 				$subcribe_links = $this->get_subcribelink();
@@ -418,6 +447,12 @@ if (!class_exists("sds_gazbfit")) {
 		
 		}
 		
+		
+		/*
+        *
+        * Get the workout sheet name and info for links
+        *
+        */
 		function get_workoutSheet (){
 	
 			$workout_sheets = $this->workoutplans->byWorkoutSheet();
@@ -429,15 +464,191 @@ if (!class_exists("sds_gazbfit")) {
 		}
 		
 		
+		/*
+		*
+		* Short code example
+		*
+		*/
+		function save_workout_set_from_shortcode() {
+			
+			if($this->is_subscriber() == true){
+			
+				include_once dirname ( __FILE__ ).'/views/subscriber/save-set-form.php';
+			
+			}else {
+				echo '<h4>Only subscribers can edit weights.</h4>';
+			}
+			
+		}
+		
+		
+		
+		/*
+		*
+		* 	Purpose: Save workout set
+		*
+		*/
+		function save_workout_set (){
+		
+			if($this->is_subscriber() == true){
+				
+				//Get user details
+				$user_id = wp_get_current_user()->ID; 
+				//$name = wp_get_current_user()->display_name;								
+								
+				//Page data
+				//$page_title = "Edit workout - Single";				
+				
+				//Process the form data
+				$validated = null;
+				//$form_data = array();
+				//$form_data['ref'] = $_GET['ref'];	
+				
+				if (count($_POST)== 0) {
+					//Get the row
+					//$single_workout = $this->workoutplans->get_Workout_by_id($_GET['set_id']);
+					
+					//$clean_fname = filter_var($_POST['first_name'], FILTER_SANITIZE_STRING);
+					//$usr_fname =  substr($clean_fname,0,5);
+					//$_passie = $this->create_hash(); -- create an id for each row/weight entry
+					
+					echo '<pre>workoutplan:' . print_r($_GET['workoutplan']) . "<pre>";
+					echo '<pre>setid: ' . print_r($_GET['setid']) . "<pre>";
+					echo '<pre>setno: ' . print_r($_GET['setno']) . "<pre>";
+					//echo '<pre>' . print_r($_REQUEST) . "<pre>";
+					//echo '<pre>' . print_r($all_workouts) . "<pre>";
+				};
+				
+				
+				if (count($_POST)>0) {
+		
+					$p = $_POST;
+					//print_r($p);
+					//$action = $_GET['action'];
+					
+					echo '<pre>workoutplan:' . print_r($_GET['workoutplan']) . "<pre>";
+					echo '<pre>setid: ' . print_r($_GET['setid']) . "<pre>";
+					echo '<pre>setno: ' . print_r($_GET['setno']) . "<pre>";					
+					echo '<pre>POST: ' . print_r($p) . "<pre>";
+		
+					$validated = true;
+		
+					/*foreach ($p as $key => $value) {
+						if( strlen($value) == 0 || $value == 'null' ){
+							$validated = false;
+							break;
+						}
+					}*/
+					
+					if (true == $validated && $action == 'save') {
+		
+						$set_data = array();
+						$set_data['user_id'] = $user_id;
+						$set_data['set_id'] = $_GET['setid'];
+						$set_data['workout_sheet_id'] = $_GET['workoutplan'];
+						$set_data['weight'] = 999;
+						print_r($set_data);
+						
+						$new_workoutset = $this->workoutplans->insert_workout_set($set_data);
+						
+						//$data['set_id'] = $p['set_id'];
+						//$data['set_name'] = $p['set_name'];
+						//$data['body_area'] = $p['body_area'];
+		
+						/*
+						if ( $this->workoutplans->update($data, array('set_id'=>$p['set_id'])) !== FALSE ) {
+		
+							$updated = TRUE;
+							
+						}else{
+							$error_msg = $this->db->wpdb->show_errors();
+						}
+						*/
+					}
+				}				
+				
+				//$this->register_js('workout_plans');
+				//$this->register_css('admin');
+				//include_once dirname ( __FILE__ ).'/views/admin/form-edit.php';
+				//include_once dirname ( __FILE__ ).'/css/admin-style.css';				
+				
+			}else {
+				$subcribe_links = $this->get_subcribelink();
+				include_once dirname ( __FILE__ ).'/views/public/error-page.php';
+			}
+		
+		}
+				
+		
+		
+		/*
+        *
+        * Get the workout body area for link to body area workouts
+        *
+        */
+		/*
+		function get_workoutBodyArea (){
+	
+			$workout_bodyareas = $this->workoutplans->byWorkoutBodyArea($sheet_id);
+			//return $workout_sheets;
+			
+			//array to string
+			return json_encode($workout_bodyareas);
+			die();
+		}
+		*/
+		
+		
+		/*
+        *
+        * Get the workout sheet name and info for links - ajax call
+        *
+        */
 		function get_workout_sheet_names_callback() {
         	//echo wp_die('<pre>' . print_r($_REQUEST) . "<pre>");
+        	
 			check_ajax_referer( '_wpnonce', 'security');
-			
 			$workout_sheets = $this->workoutplans->byWorkoutSheet();			
 			echo json_encode($workout_sheets);        	
         	wp_die();
-        }	
+        }
         
+        /*
+        *
+        * Get the workout sheet name and info for links - ajax call
+        *
+        */
+		function get_workout_bodyarea_callback() {
+        	
+        	check_ajax_referer( '_wpnonce', 'security');
+        	//echo ('<pre>' . print_r($_REQUEST) . "<pre>");
+        	//echo ('<pre>' . print_r($_POST) . "<pre>");
+			
+			//workoutsheetno
+			$sheet_id = $_REQUEST['workoutsheetno'];
+			$workout_bodyareas = $this->workoutplans->byWorkoutBodyArea($sheet_id);
+			echo json_encode($workout_bodyareas);        	
+        	wp_die();
+        }
+        
+        /*
+        *
+        * ----> Get the workouts based on body area
+        *
+        */
+		function get_bodyarea_workouts_callback() {
+        	
+        	check_ajax_referer( '_wpnonce', 'security');
+        	//echo ('<pre>' . print_r($_REQUEST) . "<pre>");
+        	//echo ('<pre>' . print_r($_POST) . "<pre>");
+			
+			//Body area name
+			$bodyarea_name = $_REQUEST['bodyareaname'];
+			$sheet_id = $_REQUEST['workoutsheetno'];
+			$workout_bodyarea_name = $this->workoutplans->get_byBodyAreaName($bodyarea_name, $sheet_id);
+			echo json_encode($workout_bodyarea_name);        	
+        	wp_die();
+        }
         
         /*
         *
@@ -453,6 +664,76 @@ if (!class_exists("sds_gazbfit")) {
 			echo json_encode($workout_sheets);        	
         	wp_die();
         }
+        
+        
+        /*
+        *
+        * Build the workout sets form - add number of rows, add any values, add form header for saving
+        *
+        */
+		function get_workout_set_form_callback($workoutset_args) {
+			
+			if($this->is_subscriber() == true){
+				
+				check_ajax_referer( '_wpnonce', 'security');
+				
+				//Get user details
+				$user_id = wp_get_current_user()->ID;
+				//Get ajax args
+				
+				//split by _
+				$args = preg_split("/[_,-, ]+/", $_REQUEST['workoutset_args']);
+				
+				$_workoutset_id = $args[0];
+				$_set_id = $args[1];
+				
+				//$formdata = '_args_workoutset_id: '.$args[0].' _args_set_id: '.$args[1];
+				//echo $formdata;
+				
+				//$_workoutset_id = substr($_REQUEST['workoutset_args'],0,1);
+				//$_set_id =  substr($_REQUEST['workoutset_args'],1,4);
+				//$formdata = '_args_workoutset_id: '.$_args_workoutset_id.' _args_set_id: '.$_args_set_id;
+				//echo $formdata;
+				
+				/*
+				$selection =  "	<select name='sds_paypal_btn_mode' id='sds_paypal_btn_mode'>";
+
+				foreach($selection_modes as $mode){
+					$selected = ($mode == $setting)? "selected" : false;
+					$selection .= "<option value='$mode' $selected>".ucfirst($mode)."</option>";
+				}
+	
+				$selection .= "</select>";
+				*/
+				
+				
+				//Get already submitted weights
+				//$workout_set_entries = $this->workoutplans->get_WorkoutSetEntries($user_id, $_set_id, $_workoutset_id);
+				
+				//Create text fields - per number of sets
+				$set_number = 3;
+				$field_markup = '';
+				for ($i = 0; $i < $set_number; $i++) {
+					$field_markup .= "<input type='text' name='".$i."' placeholder='Enter weight' value='' />";		
+				}
+				
+				$form_id = $this->sds_hash_make();
+				
+				//If no existing weight entries
+				$form_markup = "<div id='".$form_id."'>";
+				$form_markup .= $field_markup;
+				$form_markup .= '<a href="#" onClick="saveWorkoutSetForm(\''.$form_id.'\');return false;">Save</a>';
+				$form_markup .= "</div>";
+				
+				echo $form_markup;
+				wp_die();
+			
+			}else {
+				echo '<h4>Only subscribers can edit weights.</h4>';
+			}
+			
+			
+		}
 		
 			
 
@@ -480,7 +761,8 @@ if (!class_exists("sds_gazbfit")) {
 			
 			//Hidden pages
 			add_submenu_page( null, 'Edit workout', 'Edit workout','administrator', 'edit_single_workout', array($this,'edit_single_workout'), 30);
-			//add_submenu_page( null, 'View form', 'view_form','administrator', 'edit_sds_form', array($this,'sds_admin_form_edit'), 30);
+			//Save workout set
+			add_submenu_page( null, 'Save workout set', 'Save workout set','subscriber', 'save_workout_set', array($this,'save_workout_set'), 30);			
 			
 			}
 		}
@@ -502,6 +784,8 @@ if (!class_exists("sds_gazbfit")) {
 			//add_shortcode( 'testpage', 'gbf_testpage' );
 			add_shortcode( 'testpage', array($this,'gbf_testpage') );
 			add_shortcode( 'sc_workoutplans', array($this,'workout_plans') );
+			
+			add_shortcode( 'sc_save_workout_set', array($this,'save_workout_set_from_shortcode') );
 			
 			
 			/* --------------------------------------------------------
@@ -557,7 +841,12 @@ if (!class_exists("sds_gazbfit")) {
 		{
 			return date($new_format, strtotime($date));
 
-		}			
+		}
+		
+		function sds_hash_make()
+		{
+			return md5(uniqid("", true));
+		}	
 
 	}
 	//initialize our plugin

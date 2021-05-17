@@ -44,7 +44,7 @@ class SdsWorkoutplans {
 	
 	/*
 	 *
-	 * 	Purpose: Gets workouts by user
+	 * 	Purpose: Gets workouts sheets
 	 *
 	 */
 	function byWorkoutSheet() 
@@ -55,6 +55,22 @@ class SdsWorkoutplans {
 	    id,
     	sheet_name
     	from gbf_workout_sheet");
+		return $query;
+	}
+	
+	/*
+	 *
+	 * 	Purpose: Gets workout body areas
+	 *
+	 */
+	function byWorkoutBodyArea($sheet_id)
+	{
+	
+		$query =  $this->db->wpdb->get_results("
+		SELECT DISTINCT
+		gbf_workout_set.body_area
+		from gbf_workout_set
+		where gbf_workout_set.workout_sheet_id = '".$sheet_id."'");
 		return $query;
 	}
 	
@@ -122,6 +138,19 @@ class SdsWorkoutplans {
 		return $query;
 	}
 	
+	/*
+	 *
+	 * 	Purpose: Gets workouts by user
+	 *
+	 */
+	function get_byBodyAreaName($bodyareaname, $sheet_id)
+	{	
+		$query =  $this->db->wpdb->get_results("
+		SELECT * FROM gbf_workout_set where gbf_workout_set.body_area like '".$bodyareaname."' and gbf_workout_set.workout_sheet_id = ".$sheet_id."");
+		
+		return $query;
+	}
+	
 	
 	/*
  	 *
@@ -135,6 +164,40 @@ class SdsWorkoutplans {
 		$this->db->wpdb->show_errors();
 		var_dump($wpdb->last_query);
 	}
+		
+	
+	
+	/*
+ 	 *
+	 * 	Purpose: Updates a workout set
+	 *
+	 */
+	function update_workout_set($entry_id, $set_id, $sheet_id, $member_id, $weight)
+	{
+		//$weight - array		
+		$this->db->wpdb->update($this->db->tables['gbf_workout_entry'], $data, $where);
+		
+		$this->db->wpdb->show_errors();
+		var_dump($wpdb->last_query);
+	}
+	
+	
+	/*
+ 	 *
+	 * 	Purpose: Insert a workout set
+	 *
+	 */
+	function insert_workout_set($data)
+	{
+		//$weight - array
+		$this->db->wpdb->insert($this->db->tables['gbf_workout_entry'], $data);
+		
+		$this->db->wpdb->show_errors();
+		var_dump($wpdb->last_query);
+	}
+	
+	
+	
 
 	/*
  	*

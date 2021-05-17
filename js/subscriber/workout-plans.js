@@ -1,3 +1,8 @@
+/*
+*
+* Display links workouts
+* 
+*/
 jQuery('document').ready(function(){
 
 	var $ = jQuery;
@@ -10,9 +15,9 @@ jQuery('document').ready(function(){
 /* This gets all the links to choose from */
 function get_workout_links(){
 
-    var worksheet_links = jQuery('#workout_plans_worksheet_links');
-
-    jQuery.ajax({
+    var workout_plans_worksheet_links = jQuery('#workout_plans_worksheet_links');
+	
+	jQuery.ajax({
 		type: 'post',
 		url: get_workout_sheet_names_file.ajaxurl,
 		//dataType: 'text',
@@ -22,19 +27,20 @@ function get_workout_links(){
 				security: get_workout_sheet_names_file.nonce
 		},        
         beforeSend: function() {
-            worksheet_links.text('Loading links...');
+            workout_plans_worksheet_links.text('Loading links...');
         },
         success: function(data){
 
-            console.log(data);
-			worksheet_links.text(data);
+            //console.log(data);
+			workout_plans_worksheet_links.text(data);
             
-			var link = '';
+			var links = '';
             jQuery.each(data, function( index, value ) {
-                
-                link += '<a title="Workout" href="#" onclick="doWorkout('+ value.id +');return false;">'+ value.sheet_name +'</a>&nbsp';
-            });
-            worksheet_links.html(link);
+				links += '<a title="Body area" href="#" onclick="show_BodyAreaLinks('+ value.id +');return false;">'+ value.sheet_name +'</a>&nbsp';
+				
+            });			
+			//write database results
+            workout_plans_worksheet_links.html(links);
 			
         },
         error: function(jqXHR, textStatus, errorThrown){

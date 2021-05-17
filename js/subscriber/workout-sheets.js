@@ -168,7 +168,6 @@ function doWorkout(args){
                 var ii = index+1;
                 for (var i=0; i<value.sets_number; ++i){
 
-
                     var entry_id_arr = new_data_arr[index]['entry_id'][i];
                     //console.log('entry_id_arr');
                     //console.log(entry_id_arr);
