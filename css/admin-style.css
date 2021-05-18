@@ -108,10 +108,10 @@ a.button-link {
 }
 
 .button {
-  padding: 4px 10px !important;
+  padding: 4px 14px !important;
   display: inline-block !important;
   height: auto !important;
-  font-size: 12px;
+  font-size: 14px;
 }
 .button.button-danger {
   background-color: #e73c3c;
@@ -168,6 +168,13 @@ a.button-link {
 	border: 1px solid #fe6419;
 }
 
+.btn-clear {
+    border: 1px solid transparent;
+    padding: 8px 14px;
+    margin-left: 5px;
+    font-size: 14px;
+}
+
 /* ------------------------------ */
 
 .alert {
@@ -200,4 +207,42 @@ a.button-link {
 	float: right;
 }
 
+#selected_workoutplan {
+	display: none;
+}
+
+#workout_sets,
+#workout_plans_worksheet_links,
+#workout_plans_bodyareas_message {
+	margin-bottom: 20px;
+}
+
+.loading-message,
+.loading-message i {
+	font-size: 14px;
+}
+
+.form-message {
+	padding-left: 10px;
+}
+
+.msg-success {
+	color: #83de2b;
+}
+
+.wait {
+}
+
+.fa-circle-o-notch:before {
+    content: "\f1ce";
+}
+.fa-refresh:before {
+    content: "\f021";
+}
+.fa-gear:before, .fa-cog:before {
+    content: "\f013";
+}
+.fa-youtube-play:before {
+    content: "\f16a";
+}
 </style>

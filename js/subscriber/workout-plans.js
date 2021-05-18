@@ -27,7 +27,7 @@ function get_workout_links(){
 				security: get_workout_sheet_names_file.nonce
 		},        
         beforeSend: function() {
-            workout_plans_worksheet_links.text('Loading links...');
+            workout_plans_worksheet_links.html("<div class='loading-message'><i class='fa fa-refresh fa-spin fa-fw'></i> Loading workouts</div>");
         },
         success: function(data){
 

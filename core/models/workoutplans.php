@@ -108,6 +108,38 @@ class SdsWorkoutplans {
 	
 	/*
 	 *
+	 * 	------- Purpose: Get user weight entries by workout set 
+	 *
+	 */
+	function get_UserWeightsByWorkoutSet($user_id, $set_id, $workout_sheet_id) 
+	{
+	
+		$query =  $this->db->wpdb->get_results("
+		SELECT
+		workout_entry.user_id,
+		workout_entry.set_id,
+		workout_entry.workout_sheet_id,
+		workout_entry.weight,
+		workout_set.set_name,
+		workout_set.body_area
+		
+		FROM 
+		gbf_workout_entry as workout_entry,
+		gbf_workout_set as workout_set
+		
+		where 
+		workout_entry.user_id = ".$user_id."
+		and workout_entry.set_id = ".$set_id."
+		and workout_entry.workout_sheet_id = ".$workout_sheet_id."
+		and workout_set.set_id = ".$set_id."");
+		return $query;
+	}
+	
+	
+	
+	
+	/*
+	 *
 	 * 	Purpose: Gets all workouts
 	 *
 	 */
@@ -213,8 +245,8 @@ class SdsWorkoutplans {
 	
 	/*
  	 *
-	 * 	Purpose: Save a workout sets
-	 *	$user_id, $set_id, $workout_id, $weights
+	 * 	Purpose: Save a workout sets - $data in array order of columns
+	 *	
 	 */
 	function save_WorkoutSetEntries($data)
 	{		
@@ -222,6 +254,21 @@ class SdsWorkoutplans {
 		
 		//$this->db->wpdb->show_errors();
 		//var_dump($wpdb->last_query);
+	}	
+	
+	
+	/*
+ 	 *
+	 * 	Purpose: Update a workout sets
+	 *	
+	 */
+	function update_WorkoutSetEntries($data, $where)
+	{		
+		
+		$this->db->wpdb->update($this->db->tables['gbf_workout_entry'], $data, $where);
+		
+		$this->db->wpdb->show_errors();
+		var_dump($wpdb->last_query);
 	}
 	
 	

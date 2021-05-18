@@ -128,7 +128,8 @@ if (!class_exists("sds_gazbfit")) {
 		*/
 		public function init()
 		{
-		
+			date_default_timezone_set('Australia/Perth');
+			
 			//Only load ajax scripts when logged in
 			if($this->is_authorised() == true){
 				add_action('wp_enqueue_scripts', array($this,'enqueue_ajax'));
@@ -536,10 +537,12 @@ if (!class_exists("sds_gazbfit")) {
 					//print_r($p);
 					//$action = $_GET['action'];
 					
+					/*
 					echo '<pre>workoutplan:' . print_r($_GET['workoutplan']) . "<pre>";
 					echo '<pre>setid: ' . print_r($_GET['setid']) . "<pre>";
 					echo '<pre>setno: ' . print_r($_GET['setno']) . "<pre>";					
 					echo '<pre>POST: ' . print_r($p) . "<pre>";
+					*/
 		
 					$validated = true;
 		
@@ -557,7 +560,7 @@ if (!class_exists("sds_gazbfit")) {
 						$set_data['set_id'] = $_GET['setid'];
 						$set_data['workout_sheet_id'] = $_GET['workoutplan'];
 						$set_data['weight'] = 999;
-						print_r($set_data);
+						//print_r($set_data);
 						
 						$new_workoutset = $this->workoutplans->insert_workout_set($set_data);
 						
@@ -736,22 +739,40 @@ if (!class_exists("sds_gazbfit")) {
 				$weights_arr = json_decode($weights_json);
 				$weights_size = count($weights_arr);
 				
-				//Create text fields - per number of sets - some have 3 or 4
-				//$set_number = $weights_size;
-				$field_markup = '';
-				for ($i = 0; $i < $weights_size; $i++) {
-					
-					//conditions for weight data
+				//Create text fields per number of sets (some have 3 or 4)
+				// Could default weight col with [\"\",\"\",\"\"]
 				
-					$field_markup .= "<input type='text' name='".$i."' placeholder='Enter weight' value='".$weights_arr[$i]."' />";		
+				$field_markup = '';
+				$form_id = '';
+				//$form_id = //Change to entry_id //$this->sds_hash_make();
+				
+				//If no existing weights
+				if ($weights_size == 0){
+					
+					$form_id = $this->sds_hash_make();
+					for ($i = 0; $i < $_set_count; $i++) {
+						//Empty fields
+						$field_markup .= "<input type='text' name='".$form_id."' placeholder='Enter weight' value='' />";
+					}				
 				}
 				
-				$form_id = $this->sds_hash_make();
+				//If have existing weights
+				if ($weights_size >= 1){
+				
+					$form_id = $workout_set_entries[0]->entry_id;
+					for ($i = 0; $i < $weights_size; $i++) {										
+						 //enter weight data
+						 $field_markup .= "<input type='text' name='".$i."' placeholder='Enter weight' value='".$weights_arr[$i]."' />";		
+					}
+				}
 				
 				//If no existing weight entries
 				$form_markup = "<div id='".$form_id."'>";
+				$form_markup .= '<div class="'.$form_id.'">';
 				$form_markup .= $field_markup;
-				$form_markup .= '<a href="#" onClick="saveWorkoutSetForm(\''.$form_id.'\');return false;" class="button enter-weights-btn">Save</a>';
+				$form_markup .= '</div>';
+				$form_markup .= '<a href="#" onClick="saveWorkoutSetForm(\''.$form_id.'\');return false;" class="button enter-weights-btn"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Save</a>';
+				$form_markup .= '<a href="#" class="btn-clear '.$form_id.'" onClick="hideWorkoutSetForm(\''.$form_id.'\');return false;" class="btn-clear"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Hide</a>';
 				$form_markup .= "</div>";
 				
 				echo $form_markup;
@@ -777,21 +798,48 @@ if (!class_exists("sds_gazbfit")) {
 			$data = array();			
 			$data['user_id'] = wp_get_current_user()->ID;
 			//Get ajax args			
+			$data['entry_id'] = $_REQUEST['entry_id'];
 			$data['set_id'] = $_REQUEST['set_id'];
 			$data['workout_sheet_id'] = $_REQUEST['workout_id'];
 			$data['weight'] = $_REQUEST['weights'];
+			$data['date_updated'] = date('Y-m-d H:i:s');
 			
-			//Save data			
-			//$workout_set_entries = $this->workoutplans->save_WorkoutSetEntries($data);
-			if ($workout_set_entries = $this->workoutplans->save_WorkoutSetEntries($data) !== FALSE ) {
-
-				echo('Saved');
+			//Check existing entries
+			$workout_set_entries = $this->workoutplans->get_WorkoutSetEntries($data['user_id'], $data['set_id'], $data['workout_sheet_id']);
+			$weights = $workout_set_entries[0]->weight;
+			$weights_json = preg_replace('/\\\"/',"\"", $weights);
+			$weights_arr = json_decode($weights_json);
+			$weights_size = count($weights_arr);
+			
+			if ($weights_size > 1){
+			
+				//Update existing entries by entry_id
+				$data['date_completed'] = date('Y-m-d H:i:s');
+				if ($this->workoutplans->update_WorkoutSetEntries($data, array('entry_id'=>$data['entry_id'])) !== FALSE ) {
 				
-			}else{
-				$error_msg = $this->db->wpdb->show_errors();
-				echo($error_msg);				
-			} 	
-        	wp_die();
+					echo('Updated');
+					
+				}else{
+					$error_msg = $this->db->wpdb->show_errors();
+					echo($error_msg);				
+				}
+				wp_die();
+			}
+			
+			if ($weights_size == 0){		
+				//Save data - saves new entries	
+				//$workout_set_entries = $this->workoutplans->save_WorkoutSetEntries($data);
+				if ($this->workoutplans->save_WorkoutSetEntries($data) !== FALSE ) {
+	
+					echo('Saved');
+					
+				}else{
+					$error_msg = $this->db->wpdb->show_errors();
+					echo($error_msg);				
+				}
+				wp_die();
+			}
+			
         }
 
 /*

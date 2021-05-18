@@ -7,9 +7,7 @@
 <h2><?php echo $page_title; ?></h2>
 Hi <?php echo($name)." (".$user_id.")" ?>
 
-<?php
-//echo do_shortcode("[sc_save_workout_set]");
-?>
+<?php //echo do_shortcode("[sc_save_workout_set]"); ?>
 
 <!--
 ~~ If page is reloaded the workouts are cleared - use the ajax link to load back the results

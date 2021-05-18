@@ -13,7 +13,7 @@ function show_BodyAreaWorkouts(args){
 	var workout_sets = jQuery('#workout_sets');
 	
 	var workout_plans_bodyareas_message = jQuery('#workout_plans_bodyareas_message');
-	workout_plans_bodyareas_message.text('Choose workout body area');
+	//workout_plans_bodyareas_message.text('Choose workout body area');
 	var _args = args;
 	var _workoutsheetno_text = jQuery('#selected_workoutplan').text();
 	var _workoutsheetno = parseInt(_workoutsheetno_text);
@@ -36,21 +36,19 @@ function show_BodyAreaWorkouts(args){
 				security: get_bodyarea_workouts_file.nonce
 		},        
         beforeSend: function() {
-            bodyarea_links.text('Loading workouts');
-			workout_plans_mydata.text('Results...');	
+            //bodyarea_links.text('Loading workouts');			
+			bodyarea_links.html("<div class='loading-message'><i class='fa fa-refresh fa-spin fa-fw'></i> Loading workouts</div>");			
+			//workout_plans_mydata.text('Results...');	
         },
         success: function(data){
 
-            console.log(data);
-			//workout_plans_mydata.text(JSON.stringify(data));	
+            //console.log(data);
+			//workout_plans_mydata.text(JSON.stringify(data));
 			
-			/* Display sets */
-			//workout_sets = 'sdfsdf';
-			
+			/* Display sets */			
 			var table = '';
-			var tablerow = '';
-			
-			table += "<table><thead style='background: #f2f2f2;'><tr><th>Workout</th><th>No Sets</th><th>Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>";
+			var tablerow = '';			
+			table += "<table><thead style='background: white;'><tr><th></th><th>No Sets</th><th>Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>";
 			table += "<tbody>";
 			
 			jQuery.each(data, function(index, value){
@@ -59,39 +57,12 @@ function show_BodyAreaWorkouts(args){
 				var tableform = '';
 				
 				//Get the forms from an ajax request triggered by getWorkoutSetForm
-				//Form parameters
 				var form_args = _workoutsheetno_text+"_"+value.set_id+"_"+value.sets_number;
 				var div_args = _workoutsheetno_text+value.set_id;
 				
-				//getWorkoutSetForm();return false;
-				//var click = "getWorkoutSetForm('"+form_args+"');return false;";
+                tablerow += "<tr style='background: #f2f2f2;'><td><span style='padding-left:5px;'><strong>" + value.set_name + "</strong></span><a class='btn-clear' href='https://www.youtube.com/embed/" + value.video_link + "?rel=0&amp;autoplay=1' data-featherlight='iframe' data-featherlight-iframe-width='640' data-featherlight-iframe-height='480' data-featherlight-iframe-frameborder='0' data-featherlight-iframe-allow='autoplay; encrypted-media' data-featherlight-iframe-allowfullscreen='true'><i class='fa fa-play-circle' aria-hidden='true'></i> Play video</a> <a href='#' onclick='getWorkoutSetForm(\""+form_args+"\");return false;' class='button enter-weights-btn'>Enter weights</a></td><td>" + value.sets_number + "</td><td>" + value.reps + "</td><td>" + value.tempo + "</td><td>" + value.rest + "</td><td>" + value.notes + "</td></tr>";
 				
-				//var workoutsheetno_text_stg = _workoutsheetno_text.toString();
-				//var set_id_stg = value.set_id.toString();				
-				//var form_args = workoutsheetno_text_stg+"_"+set_id_stg;
-				
-                tablerow += "<tr><td>" + value.set_name + " <a href='https://www.youtube.com/embed/" + value.video_link + "?rel=0&amp;autoplay=1' data-featherlight='iframe' data-featherlight-iframe-width='640' data-featherlight-iframe-height='480' data-featherlight-iframe-frameborder='0' data-featherlight-iframe-allow='autoplay; encrypted-media' data-featherlight-iframe-allowfullscreen='true'> Play video</a> <a href='#' onclick='getWorkoutSetForm(\""+form_args+"\");return false;' class='button enter-weights-btn'>Enter weights (drop down)</a></td><td>" + value.sets_number + "</td><td>" + value.reps + "</td><td>" + value.tempo + "</td><td>" + value.rest + "</td><td>" + value.notes + "</td></tr>";	
-				
-				//+form_args+
-				
-				//var form_header = "<form method='post' action='http://localhost:8888/gazbfit/prod/wp-admin/admin.php?page=save_workout_set&workoutplan="+workout_plan+"&setid="+set_id+"&setno="+value.sets_number+"&action=save'>";
-				
-				//For each value.reps add fields	
-				/*var ii = 0;
-                for (i=0; i<value.sets_number; ++i){
-					ii++;
-					tableform += "<input type='text' name='"+ ii +"' placeholder='Enter weight' value='' />";
-				}*/
-				
-				//tablerow += "<tr style='background: #f5f5f5;'><td colspan='6'>";
-				//tablerow += "<div class='workout-set-form'>";
-				//tablerow += form_header;//"<form method='post' action='save'>";
-				//tablerow += tableform;
-				//tablerow += "<input type='submit' class='button' value='Save'>";
-				//tablerow += "</form></div>";
-				//tablerow += "</td></tr>";
-				
-				tablerow += "<tr style='background: #f5f5f5;'><td colspan='6'>";
+				tablerow += "<tr style='background: white;'><td colspan='6'>";
 				tablerow += "<div id='"+form_args+"'>";
 				tablerow += "</div></td></tr>";
 				
@@ -100,35 +71,8 @@ function show_BodyAreaWorkouts(args){
 			table += tablerow;
 			table += "</tbody>";
 			table += "</table>";
-			
-			/*
-			* Drop down/list workouts (Deadlift, )
-			* Insert a form to save / show the weights
-			*
-			*/
-			
-			//var tablerow = '';
-			/*tablerow += "<table><thead style='background: #f2f2f2;'><tr><th></th><th>Workout</th><th>No Sets</th><th>Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>";
-			tablerow += "<tbody>";
-			
-			tablerow += "<tr>";
-			tablerow += "<td>XXXX</td>";
-			tablerow += "</tr>";
-			
-			tablerow += "</tbody>";
-			tablerow += "</table>";
-			*/
-			
+						
 			workout_plans_results.html(table);
-			
-			/*
-			var link = '';
-            jQuery.each(data, function( index, value ) {
-				link += '<a title="Body area" href="#" onclick="show_BodyAreaWorkouts('+ value.id +');return false;">'+ value.body_area +'</a>&nbsp';
-				
-            });
-			*/
-            //bodyarea_links.html(link);
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log('error: ' + textStatus + ': ' + errorThrown);

@@ -8,14 +8,21 @@ function show_BodyAreaLinks(args){
 	//Display the workout id for the body areas get
 	jQuery('#selected_workoutplan').text(args);
 	
+	//hide the sets tables
+	jQuery('#workout_plans_results').text('');
+	
 	//Links under the workout shhet links
 	var bodyarea_links = jQuery('#workout_plans_bodyareas_links');
-	bodyarea_links.text('Loading body areas');
+	//bodyarea_links.text('Loading body areas');
+	bodyarea_links.html("<div class='loading-message'><i class='fa fa-refresh fa-spin fa-fw'></i></div>");
 	
 	var workout_plans_bodyareas_message = jQuery('#workout_plans_bodyareas_message');
-	workout_plans_bodyareas_message.text('Choose workout body area');
+	workout_plans_bodyareas_message.html('<span>Choose workout body area</span>');
 	var _args = args;
 	//console.log('args: ' + args);
+	
+	//Div for all the workout sets
+	var workout_plans_results = jQuery('#workout_plans_results');
 	
 	/*var workout_plans_bodyareas_links = jQuery('#workout_plans_bodyareas_links');
 	var workout_plans_results = jQuery('#workout_plans_results');
@@ -36,11 +43,13 @@ function show_BodyAreaLinks(args){
 				security: get_workout_bodyarea_file.nonce
 		},        
         beforeSend: function() {
-            bodyarea_links.text('Loading links...');
+            bodyarea_links.html("<div class='loading-message'><i class='fa fa-refresh fa-spin fa-fw'></i> Loading body areas</div>");
         },
         success: function(data){
 
-            console.log(data);
+            //console.log(data);
+			workout_plans_results.html('');
+			workout_plans_bodyareas_message.html('<span>Choose workout body area</span>');
 			bodyarea_links.text(data);
             
 			var link = '';
