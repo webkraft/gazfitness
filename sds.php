@@ -59,7 +59,10 @@ if (!class_exists("sds_gazbfit")) {
         	add_action( 'wp_ajax_get_workout_sheet_names', array( $this, 'get_workout_sheet_names_callback') );        	
         	add_action( 'wp_ajax_get_workout_bodyarea', array( $this, 'get_workout_bodyarea_callback') );        	
         	add_action( 'wp_ajax_get_bodyarea_workouts', array( $this, 'get_bodyarea_workouts_callback') );        	
+        	
+        	//Workout sets
         	add_action( 'wp_ajax_get_workout_set_form', array( $this, 'get_workout_set_form_callback') );
+        	add_action( 'wp_ajax_save_workout_set_form', array( $this, 'save_workout_set_form_callback') );
         	
         	//add_action( 'wp_ajax_get_workout_sheets', array( $this, 'get_workout_sheets_callback') );
         	//add_action( 'wp_ajax_nopriv_my_action', array( $this, 'get_workout_sheet_names_callback') );
@@ -104,6 +107,13 @@ if (!class_exists("sds_gazbfit")) {
 	        // --- Get and set workout set form
 	        wp_enqueue_script('get_workout_set_form', plugins_url('js/subscriber/workout-set-form.js', __FILE__), array('jquery'), '1.0', true);
 	        wp_localize_script( 'get_workout_set_form', 'get_workout_set_form_file', array(
+	            'ajaxurl' => admin_url('admin-ajax.php'),
+	            'nonce' => wp_create_nonce('_wpnonce')
+	        ));
+	        
+	        // --- Get and set workout set form
+	        wp_enqueue_script('save_workout_set_form', plugins_url('js/subscriber/workout-save-set-form.js', __FILE__), array('jquery'), '1.0', true);
+	        wp_localize_script( 'save_workout_set_form', 'save_workout_set_form_file', array(
 	            'ajaxurl' => admin_url('admin-ajax.php'),
 	            'nonce' => wp_create_nonce('_wpnonce')
 	        ));
@@ -686,9 +696,7 @@ if (!class_exists("sds_gazbfit")) {
 				
 				$_workoutset_id = $args[0];
 				$_set_id = $args[1];
-				
-				//$formdata = '_args_workoutset_id: '.$args[0].' _args_set_id: '.$args[1];
-				//echo $formdata;
+				$_set_count = $args[2];
 				
 				//$_workoutset_id = substr($_REQUEST['workoutset_args'],0,1);
 				//$_set_id =  substr($_REQUEST['workoutset_args'],1,4);
@@ -708,13 +716,34 @@ if (!class_exists("sds_gazbfit")) {
 				
 				
 				//Get already submitted weights
-				//$workout_set_entries = $this->workoutplans->get_WorkoutSetEntries($user_id, $_set_id, $_workoutset_id);
+				$workout_set_entries = $this->workoutplans->get_WorkoutSetEntries($user_id, $_set_id, $_workoutset_id);
+				//print_r($workout_set_entries);
 				
-				//Create text fields - per number of sets
-				$set_number = 3;
+				/*
+				[entry_id] => 51
+	            [user_id] => 9
+	            [set_id] => 0
+	            [workout_sheet_id] => 1
+	            [weight] => [\"23\",\"23\",\"23\"]
+	            [completed] => 
+	            [complete_date] => 
+	            */
+	            	            
+	            //echo 'A: '.$workout_set_entries[0]->weight;
+	            //A: [\"23\",\"23\",\"23\"]
+	            $weights = $workout_set_entries[0]->weight;
+				$weights_json = preg_replace('/\\\"/',"\"", $weights);
+				$weights_arr = json_decode($weights_json);
+				$weights_size = count($weights_arr);
+				
+				//Create text fields - per number of sets - some have 3 or 4
+				//$set_number = $weights_size;
 				$field_markup = '';
-				for ($i = 0; $i < $set_number; $i++) {
-					$field_markup .= "<input type='text' name='".$i."' placeholder='Enter weight' value='' />";		
+				for ($i = 0; $i < $weights_size; $i++) {
+					
+					//conditions for weight data
+				
+					$field_markup .= "<input type='text' name='".$i."' placeholder='Enter weight' value='".$weights_arr[$i]."' />";		
 				}
 				
 				$form_id = $this->sds_hash_make();
@@ -722,7 +751,7 @@ if (!class_exists("sds_gazbfit")) {
 				//If no existing weight entries
 				$form_markup = "<div id='".$form_id."'>";
 				$form_markup .= $field_markup;
-				$form_markup .= '<a href="#" onClick="saveWorkoutSetForm(\''.$form_id.'\');return false;">Save</a>';
+				$form_markup .= '<a href="#" onClick="saveWorkoutSetForm(\''.$form_id.'\');return false;" class="button enter-weights-btn">Save</a>';
 				$form_markup .= "</div>";
 				
 				echo $form_markup;
@@ -735,7 +764,35 @@ if (!class_exists("sds_gazbfit")) {
 			
 		}
 		
+		
+		/*
+        *
+        * Get the workout sheet name and info for links - ajax call
+        *
+        */
+		function save_workout_set_form_callback() {
+        	
+			check_ajax_referer( '_wpnonce', 'security');
 			
+			$data = array();			
+			$data['user_id'] = wp_get_current_user()->ID;
+			//Get ajax args			
+			$data['set_id'] = $_REQUEST['set_id'];
+			$data['workout_sheet_id'] = $_REQUEST['workout_id'];
+			$data['weight'] = $_REQUEST['weights'];
+			
+			//Save data			
+			//$workout_set_entries = $this->workoutplans->save_WorkoutSetEntries($data);
+			if ($workout_set_entries = $this->workoutplans->save_WorkoutSetEntries($data) !== FALSE ) {
+
+				echo('Saved');
+				
+			}else{
+				$error_msg = $this->db->wpdb->show_errors();
+				echo($error_msg);				
+			} 	
+        	wp_die();
+        }
 
 /*
 *

@@ -27,16 +27,16 @@ class SdsWorkoutplans {
 	
 		$query =  $this->db->wpdb->get_results("
 		select distinct
-	    wkr_entry.member_id,
+	    wkr_entry.user_id,
 	    wkr_entry.workout_sheet_id,
 	    sub.user_nicename,
 	    wrk_sheet.sheet_name,
 	    wrk_sheet.workout_url
 	    from
 	    gbf_workout_entry as wkr_entry
-	    join wp_users as sub on wkr_entry.member_id = sub.id
+	    join wp_users as sub on wkr_entry.user_id = sub.id
 	    join gbf_workout_sheet as wrk_sheet on wrk_sheet.id = wkr_entry.workout_sheet_id
-	    where member_id = '".$user_id."'");
+	    where user_id = '".$user_id."'");
 		
 		return $query;
 		//return $this->db->wpdb->get_results( $query );
@@ -172,6 +172,7 @@ class SdsWorkoutplans {
 	 * 	Purpose: Updates a workout set
 	 *
 	 */
+	/*
 	function update_workout_set($entry_id, $set_id, $sheet_id, $member_id, $weight)
 	{
 		//$weight - array		
@@ -179,6 +180,17 @@ class SdsWorkoutplans {
 		
 		$this->db->wpdb->show_errors();
 		var_dump($wpdb->last_query);
+	}
+	*/
+	
+	function update_workout_set($data, $entry_id)
+	{
+	
+		$result['weight']	= $data['weight'];
+		//$result['salutation']	= $data['salutation'];
+		
+		$this->db->wpdb->update($this->db->tables['gbf_workout_entry'], $result, array('entry_id'=>$entry_id));
+		$this->db->wpdb->show_errors();
 	}
 	
 	
@@ -189,6 +201,7 @@ class SdsWorkoutplans {
 	 */
 	function insert_workout_set($data)
 	{
+		//print_r($data);
 		//$weight - array
 		$this->db->wpdb->insert($this->db->tables['gbf_workout_entry'], $data);
 		
@@ -197,6 +210,36 @@ class SdsWorkoutplans {
 	}
 	
 	
+	
+	/*
+ 	 *
+	 * 	Purpose: Save a workout sets
+	 *	$user_id, $set_id, $workout_id, $weights
+	 */
+	function save_WorkoutSetEntries($data)
+	{		
+		$this->db->wpdb->insert($this->db->tables['gbf_workout_entry'], $data);
+		
+		//$this->db->wpdb->show_errors();
+		//var_dump($wpdb->last_query);
+	}
+	
+	
+	/*
+	 *
+	 * 	Purpose: Gets workout set
+	 *
+	 */
+	function get_WorkoutSetEntries($user_id, $_set_id, $_workoutset_id)
+	{	
+		$query =  $this->db->wpdb->get_results("
+		SELECT * FROM gbf_workout_entry where gbf_workout_entry.user_id = ".$user_id." and gbf_workout_entry.set_id = ".$_set_id." and gbf_workout_entry.workout_sheet_id = ".$_workoutset_id."");
+		
+		return $query;
+		
+		$this->db->wpdb->show_errors();
+		var_dump($wpdb->last_query);
+	}
 	
 
 	/*

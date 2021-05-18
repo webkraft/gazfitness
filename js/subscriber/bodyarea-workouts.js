@@ -60,7 +60,7 @@ function show_BodyAreaWorkouts(args){
 				
 				//Get the forms from an ajax request triggered by getWorkoutSetForm
 				//Form parameters
-				var form_args = _workoutsheetno_text+"_"+value.set_id;
+				var form_args = _workoutsheetno_text+"_"+value.set_id+"_"+value.sets_number;
 				var div_args = _workoutsheetno_text+value.set_id;
 				
 				//getWorkoutSetForm();return false;
@@ -92,7 +92,7 @@ function show_BodyAreaWorkouts(args){
 				//tablerow += "</td></tr>";
 				
 				tablerow += "<tr style='background: #f5f5f5;'><td colspan='6'>";
-				tablerow += "<div id='"+div_args+"'>";
+				tablerow += "<div id='"+form_args+"'>";
 				tablerow += "</div></td></tr>";
 				
             });
