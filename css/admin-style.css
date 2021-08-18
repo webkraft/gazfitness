@@ -1,115 +1,88 @@
-@import 'font-awesome.min.css';
+<style>
+/* ## Forms */
+input,
+select,
+textarea {
+  padding: 8px !important;
+  margin:10px 0;
+  border: 1px solid #fe6419;
+}
 
-/*
-@import 'bootstrap.css';
-@import 'bootstrap-responsive.css';
-*/
+/* Admin */
+.php-error #adminmenuback, .php-error #adminmenuwrap {
+    margin-top: 0em;
+}
 
-.pull-left {
-  float: left !important;
+#workout_plans_worksheet_links a,
+#workout_plans_bodyareas_links a {
+border: 1px solid #fe6419;
+padding: 2px 8px;
 }
-.pull-right {
-  float: right !important;
+
+#workout_plans_bodyareas_links {
+margin-top: 20px;
 }
-.lcp-clearfix:before,
-.lcp-clearfix:after {
-  content: ' ';
-  display: table;
+
+#workout_plans_bodyareas_links a {
+padding: 2px 16px;
 }
-.lcp-clearfix:after {
-  clear: both;
+
+#worksheet_links a{border: 1px solid #fe6419; padding: 2px 8px;}
+.ab-block-accordion .ab-accordion-title{background: white !important;}
+.accordion input{padding: 3px 8px;}
+
+/* Responsive tables */
+.responsive_table_wrapper{
+    overflow-x: auto;
 }
-.lcp-content h2 {
-  font-size: 22px;
-  margin: 15px 0;
+
+.responsive_table_wrapper table {
+    width: 1200px;
 }
-.stats-grid {
-  width: 1060px;
+
+.inner {
+  padding-left: 1em;
+  overflow: hidden;
+  display: none;
 }
-.stats-grid .row {
-  margin: 0 -10px;
+
+ul.accordion{
+  margin-left: 0;
 }
-.stats-grid .row .wrapper {
-  margin-left: 10px;
-  margin-right: 10px;
-  float: left !important;
-  min-width: 340px;
+
+ul.accordion li{
+  list-style-type: none;
 }
-.stats-grid:before,
-.stats-grid:after {
-  content: ' ';
-  display: table;
+
+.inner table{
+  margin-bottom: 10px;
 }
-.stats-grid:after {
-  clear: both;
+
+ul li {
+  margin: 0.5em 0;
+  list-style-type: none;
 }
-.tile {
+
+li a.toggle {
   width: 100%;
   display: block;
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fefefe;
+  padding: 0.75em;
+  border-radius: 0.15em;
+  transition: background 0.3s ease;
 }
-.tile.tile-sky .tile-header {
-  background: #b1e6f3;
+
+ul li a.toggle:hover {
+  background: rgba(0, 0, 0, 0.9);
 }
-.tile.tile-sky .tile-body {
-  background: #92d5e5;
+
+.table-wrapper {
+    height: 1000px;
+    overflow-x: scroll;
+    width: max-content;
 }
-.tile.tile-midnightblue .tile-header {
-  background: #b9f59a;
-}
-.tile.tile-midnightblue .tile-body {
-  background: #acec8c;
-}
-.tile.tile-orange .tile-header {
-  background: #f56f44;
-}
-.tile.tile-orange .tile-body {
-  background: #f15624;
-}
-.tile .tile-header {
-  padding: 5px 10px;
-  border-top-right-radius: 1px;
-  border-top-left-radius: 1px;
-  text-transform: uppercase;
-  text-align: center;
-  letter-spacing: 0.04em;
-}
-.tile .tile-body {
-  padding: 10px;
-}
-.tile .tile-body div {
-  font-size: 42px;
-  line-height: 56px;
-  height: 60px;
-}
-.tile .tile-body:before,
-.tile .tile-body:after {
-  content: ' ';
-  display: table;
-}
-.tile .tile-body:after {
-  clear: both;
-}
-.tile p {
-  margin: 0;
-  text-align: left;
-}
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 1px;
-}
-.alert.alert-danger {
-  background-color: #fdf2f2;
-  border-color: #f29797;
-  color: #a81515;
-}
-.alert.alert-success {
-  background-color: #ebf6e1;
-  border-color: #b8df92;
-  color: #527f26;
-}
+
 .table {
   border-collapse: collapse;
   background-color: #ffffff;
@@ -133,18 +106,21 @@
 .table.table-striped tr:nth-child(even) {
   background: #f7f8fa;
 }
-.no-box-shadow {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+
+/* ------------------------------- */
+
+a.button-link {
+	padding: 10px 16px;
+	border: 1px solid #333;
+	border-radius: 3px;
+	text-decoration: none;
 }
+
 .button {
-  padding: 4px 10px !important;
-  display: inline-block !important;
-  height: auto !important;
-  font-weight: 600;
-  font-size: 12px;
-  color: #ffffff !important;
+  padding: 8px 14px !important;
+  display: inline-block;
+  height: auto;
+  font-size: 14px;
 }
 .button.button-danger {
   background-color: #e73c3c;
@@ -196,138 +172,241 @@
 .button.button-default {
   color: #000000 !important;
 }
-.lcp-form label {
-  display: inline-block; 
+
+.enter-weights-btn {
+	border: 1px solid #fe6419;
+    width: 100%;
+    text-align: center;
+}
+
+/* ------------------------------ */
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+.alert.alert-danger {
+  background-color: #fdf2f2;
+  border-color: #f29797;
+  color: #a81515;
+}
+.alert.alert-success {
+  background-color: #ebf6e1;
+  border-color: #b8df92;
+  color: #527f26;
+}
+
+/* --------------------------------- */
+
+.set-wrapper {
+	width: 100%;
+}
+
+.set-inner {
+    display: inline-block;
+    float: left;
+    border: 1px solid #fe6419;
+    padding: 10px;
+    width: 30%;
+    min-height: 180px;
+    margin: 5px;
+	text-align: center;
+}
+
+.set-specs div {
+	display: inline-block;
+    float: left;
+}
+
+ul.workout-links li {
+    display: inline-block;
+    padding: 0 3px;
+    margin-bottom: 5px;
+}
+
+ul.workout-links a {
+border: 1px solid #fe6419;
+padding: 2px 8px}
+
+input[type="radio"].disabled + label{
+	opacity:0.5;
+	background: #f1f1f1;
+	color:#a9a9a9;
+	border:1px solid #a9a9a9;
+}
+.set-inner {
+    min-height: 280px !important;
+}
+
+.play-link {
+	width: 100%;
+    margin: 5px 0;
+}
+
+.btn-clear {
+    border: 1px solid #e2e2e2;
+    padding: 6px 14px;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+/*.set-specs div {
+    display: inline-block;
+    float: left;
+    border-right: 1px solid #ccc;
+    padding: 3px;
+}*/
+
+.set-specs {
+	margin-top: 5px;
+}
+.set-specs div {
+    display: inline-block;
+    float: left;
+    /* border-right: 1px solid #ccc; */
+    padding: 6px;
+    width: 25%;
+}
+.set-specs div:last-child {
+    border-right: none;
+}
+.set-specs i {
+    display: block;
+    font-size: 20px;
+}
+.set-specs p {
+    font-size: 16px;
+    margin-bottom: -8px;
+    padding-bottom: 0;
+    margin-top: 3px;
+    margin-top: px;
+}
+.set-specs span {
+	font-size: 10px;
+	text-transform: uppercase;
+}
+
+.set-specs.notes {
+	text-align: left;
+}
+
+.edit-link a{
+	width:100%;
+}
+
+/* --------------------------------- */
+
+#workout_plans_results input,
+#workout_plans_results select,
+#workout_plans_results textarea {
+    padding: 8px 12px;
+}
+
+.workout-set-form {
+	width: 300px;
+	float: right;
+}
+
+#selected_workoutplan {
+	display: none;
+}
+
+#workout_sets,
+#workout_plans_worksheet_links,
+#workout_plans_bodyareas_message {
+	margin-bottom: 20px;
+}
+
+.loading-message,
+.loading-message i {
+	font-size: 14px;
+}
+
+.form-message {
+	padding-left: 10px;
+}
+
+.msg-success {
+	color: #83de2b;
+}
+
+.wait {
+}
+
+.fa-circle-o-notch:before {
+    content: "\f1ce";
+}
+.fa-refresh:before {
+    content: "\f021";
+}
+.fa-gear:before, .fa-cog:before {
+    content: "\f013";
+}
+.fa-youtube-play:before {
+    content: "\f16a";
+}
+.fa-rotate-right:before, .fa-repeat:before {
+    content: "\f01e";
+}
+.fa-sort-amount-asc:before {
+    content: "\f160";
+}
+
+/* --- Radio button --- */
+input.radio-workoutlevel{
+	filter:alpha(opacity=0);
+	-moz-opacity:0;
+	-khtml-opacity: 0;
+	opacity: 0;
+    cursor: pointer;
+	margin-left:-13px;
+}
+input.radio-workoutlevel + label{
+	margin-right:5px;
+	margin-left:2px;
+	margin-bottom:0px;
+	border-style: solid;
+	border-width: 0px;
+	border-radius:3px;
+	cursor: pointer;
+	font-weight: normal;
+	line-height: normal;
+	position: relative;
+	text-decoration: none;
+	text-align: center;
+	display: inline-block;
+	padding-top: 1rem;
+	padding-right: 1.3rem;
+	padding-bottom: 1rem;
+	padding-left: 1.3rem;
+	border:1px solid #fe6419;
+	color: #fe6419;
+	transition: background-color 100ms ease-out;
+}
+input.radio-workoutlevel + label:hover,
+input.radio-workoutlevel + label:focus {
+	background-color: white;
+	color: black;
+}
+input.radio-workoutlevel:checked + label {
+    background-color:#fe6419;
+	color: white;
 }
 
 
-.lcp-form input,
-.lcp-form textarea,
-.lcp-form select {
-  margin-bottom: 10px;
-  border:1px solid #ccc;
-  padding: 5px;
-border-radius: 3px;
-}
-
-.lcp-form select {
-    margin: 3px;
-    border: 1px solid #111;
-    background: transparent;
-    width: 80px;
-    padding: 5px 35px 5px 5px;
-    border: 1px solid #ccc;
-    height: 34px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: url(icon-arrow-down.png) 96% / 15% no-repeat #fff;
-    color: darkgrey;
-}
-
+/* ------ ipad below -- */
+/* --- Phones --- */
+/* Galaxy A11 */
 @media only screen 
-and (min-device-width : 300px) 
-and (max-device-width : 1025px) { 
-
-.lcp-form input,
-.lcp-form textarea,
-.lcp-form select {
-width: 100%;
-}
-.lcp-form select {
-  width: 100%;
-  background: url(icon-arrow-down.png) 96% / 15px no-repeat #fff;
-  margin: 10px 0px;
-}
+and (max-width : 540px) 
+and (max-height : 960px)
+and (orientation : portrait){
+.banner-heading{font-size: 36px;margin-top:40px}
+.wp-block-media-text__content{margin-top:20px}
 }
 
-
-.lcp-form input[type="submit"] {
-border: solid 1px #cccccc !important;
-border-radius: 0;
-font-size: 16px;
-font-weight: normal;
-color: #000;
-box-shadow: none;
-width: auto;
-text-decoration: none;
-cursor: pointer;
-line-height: 1;
-text-shadow: none;
-text-transform: uppercase;
-background: #e0e0e0 !important;
-padding: 7px !important;
-}
-
-
-.pill {
-  color: #ffffff;
-  padding: 2px 5px;
-  text-transform: capitalize;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-}
-.pill.pill-primary {
-  background-color: #1e8cbe;
-}
-.pill.pill-rejected {
-  background-color: #e3180d;
-}
-.pill.pill-pending {
-  background-color: #ff6105;
-}
-.pill.pill-approved {
-  background-color: #23d12f;
-}
-
-table.lcp_input {
-	border: 0 none;
-	background: #fff;
-}
-
-table.lcp_input tbody tr td {
-	padding: 13px 15px;
-	border-top: 1px solid #f5f5f5;
-	border-bottom: 0 none;
-}
-
-table.lcp_input tbody tr td.label {
-	width: 24%;
-	vertical-align: top;
-	background: #F9F9F9;
-	border-top: 1px solid #f0f0f0;
-    border-right: 1px solid #E1E1E1;
-}
-
-table.lcp_input > tbody > tr:first-child > td,
-table.lcp_input > tbody > tr:first-child > td.label {
-	border-top: 0 none;
-}
-
-table.lcp_title td
-{
-	width: 100%;
-}
-
-.widefat .tile-midnightblue td
-{
-	color: #fff;
-}
-
-td.field-outer
-{
-	width: 100%;
-}
-
-/*target Internet Explorer 9 and Internet Explorer 10:*/
-
-@media screen and (min-width: 0\0) {
-  select {
-    background: none;
-    padding: 5px;
-  }
-}
+</style>

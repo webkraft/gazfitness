@@ -19,8 +19,11 @@ var $wpdb;
 
 		// Set the names of the database tables
 		$this->tables = array(
-                'gbf_test_1' => $this->wpdb->prefix . 'gbf_test');
-
+		'gbf_test_1' => $this->wpdb->prefix . 'gbf_test',
+		'gbf_workout_set' => 'gbf_workout_set',
+		'gbf_workout_entry' => 'gbf_workout_entry',
+		'gbf_workout_sheet' => 'gbf_workout_sheet',
+		'gbf_workout_user' => 'gbf_workout_user');
 	}
 
 	/*
