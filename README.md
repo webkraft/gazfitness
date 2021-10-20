@@ -1,2 +1,2 @@
 # gazfitness
-Website plugin
+WordPress plugin
